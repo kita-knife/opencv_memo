@@ -108,3 +108,7 @@ Intel Media SDK现在可以被我们的videoio模块用来进行硬件加速的�
     - 免费国内服务器，但需要交押金，随时全额原路退还
         - 有需要的朋友请加入QQ群，发【手机号】给群主
         - ![free_server](data/free_server.jpeg)
+
+# opencv_memo
+# 学习使用用，如有侵权，请联系我chenlaifu.cn@hotmail.com
+

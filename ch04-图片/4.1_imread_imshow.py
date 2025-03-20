@@ -20,8 +20,8 @@ rows,cols,ch=img.shape
 print('行/高:',rows,'列/宽:',cols,'通道:',ch)
 #图像的宽对应的是列数, 高对应的是行数。
 
-cv2.namedWindow('image', cv2.WINDOW_NORMAL)#可以调整窗口大小
-# cv2.namedWindow('image', cv2.WINDOW_AUTOSIZE)#自动调整
+# cv2.namedWindow('image', cv2.WINDOW_NORMAL)#可以调整窗口大小
+cv2.namedWindow('image', cv2.WINDOW_AUTOSIZE)#自动调整
 # cv2.namedWindow('image', cv2.WINDOW_KEEPRATIO)#保持图片比例
 
 # cv2.resizeWindow('image', 200, 200)  # 不起作用？

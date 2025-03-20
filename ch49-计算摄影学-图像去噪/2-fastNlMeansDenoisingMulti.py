@@ -15,6 +15,7 @@ from matplotlib import pyplot as plt
 cap = cv2.VideoCapture('../data/vtest.avi')
 # create a list of first 5 frames
 img = [cap.read()[1] for i in range(5)]
+print(img[0].shape)
 # convert all to grayscale
 gray = [cv2.cvtColor(i, cv2.COLOR_BGR2GRAY) for i in img]
 # convert all to float64
@@ -33,6 +34,9 @@ dst = cv2.fastNlMeansDenoisingMulti(noisy, 2, 5, None, 4, 7, 35)
 
 
 plt.subplot(131), plt.imshow(gray[2], 'gray')
+plt.title('gray'),plt.xticks([]),plt.yticks([])
 plt.subplot(132), plt.imshow(noisy[2], 'gray')
+plt.title('noisy'),plt.xticks([]),plt.yticks([])
 plt.subplot(133), plt.imshow(dst, 'gray')
+plt.title('dst'),plt.xticks([]),plt.yticks([])
 plt.show()
