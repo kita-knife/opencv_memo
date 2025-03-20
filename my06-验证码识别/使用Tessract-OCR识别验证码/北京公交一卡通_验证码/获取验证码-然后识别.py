@@ -17,25 +17,25 @@ import numpy as np
 import cv2
 
 
-user_agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36'
-headers = {'User-Agent': user_agent}
+# user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36'
+# headers = {'User-Agent': user_agent}
 
 
-url = 'http://www.bjsuperpass.com/captcha.svl?d=1503144107405'
-rs = requests.get(url, headers=headers, timeout=10)
-print('获取公交一卡通网站的验证码',rs.status_code)
-#TODO 获取cookies
+# url = 'http://www.bjsuperpass.com/captcha.svl?d=1503144107405'
+# rs = requests.get(url, headers=headers, timeout=10)
+# print('获取公交一卡通网站的验证码',rs.status_code)
+# #TODO 获取cookies
 
 
-print('用BytesIO导入到Image，Numpy，Opencv')
-s1 = BytesIO(rs.content)  # img = Image.open(BytesIO(resp.read()))
-#
-img = Image.open(s1)
-img = img.convert("RGB")
-im=np.array(img)
-cv2.imshow('src',im)
-cv2.waitKey(0)
-cv2.imwrite('captcha.jpg',im)
+# print('用BytesIO导入到Image，Numpy，Opencv')
+# s1 = BytesIO(rs.content)  # img = Image.open(BytesIO(resp.read()))
+# #
+# img = Image.open(s1)
+# img = img.convert("RGB")
+# im=np.array(img)
+# cv2.imshow('src',im)
+# cv2.waitKey(0)
+# cv2.imwrite('captcha.jpg',im)
 
 
 ocr = PyTessBaseAPI()
@@ -44,5 +44,8 @@ ocr.SetVariable("tessedit_char_whitelist", "0123456789abcdefghijklmnopqrstuvwxyz
 # ocr.SetPageSegMode(tesseract.PSM_AUTO)
 # ocr.SetImage(img)
 
+img = Image.open('captcha1.jpeg')
+img = img.convert("RGB")
+im=np.array(img)
 print('验证码是',tesserocr.image_to_text(img))
 #TODO 发送cookies

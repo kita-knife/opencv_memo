@@ -11,7 +11,7 @@ from PIL import Image
 print(tesserocr.tesseract_version())  # print tesseract-ocr version
 print(tesserocr.get_languages())  # prints tessdata path and list of available languages
 
-image = Image.open('sample.jpg')
+image = Image.open('sample1.jpeg')
 print(tesserocr.image_to_text(image))  # print ocr text from image
 # or
 print(tesserocr.file_to_text('sample.jpg'))

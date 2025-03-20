@@ -29,13 +29,17 @@ import argparse
 import imutils
 import cv2
 
-# construct the argument parser and parse the arguments解析命令行参数
-ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", required=True,
-                help="path to input image")
-ap.add_argument("-r", "--reference", required=True,
-                help="path to reference OCR-A image")
-args = vars(ap.parse_args())
+# # construct the argument parser and parse the arguments解析命令行参数
+# ap = argparse.ArgumentParser()
+# ap.add_argument("-i", "--image", required=True,
+#                 help="path to input image")
+# ap.add_argument("-r", "--reference", required=True,
+#                 help="path to reference OCR-A image")
+# args = vars(ap.parse_args())
+
+args = {'image':'card2.png',
+        'reference':'reference.png'
+        }
 
 # define a dictionary that maps the first digit of a credit card
 # number to the credit card type定义信用卡类型
@@ -55,38 +59,9 @@ ref = cv2.imread(args["reference"])
 ref = cv2.cvtColor(ref, cv2.COLOR_BGR2GRAY)
 ref = cv2.threshold(ref, 10, 255, cv2.THRESH_BINARY_INV)[1]
 
-cv2.imshow('ref', ref)
-cv2.waitKey(0)
+# cv2.imshow('ref', ref)
+# cv2.waitKey(0)
 
-'''
-# find contours in the OCR-A image (i.e,. the outlines of the digits)
-# sort them from left to right, and initialize a dictionary to map
-# digit name to the ROI
-# refCnts = cv2.findContours(ref.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)#有问题
-refCnts = cv2.findContours(ref.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-# refCnts = refCnts[0] if imutils.is_cv2() else refCnts[1]
-refCnts = refCnts[1]
-print('len cnt:',len(refCnts))
-refCnts = contours.sort_contours(refCnts, method="left-to-right")[0]#排列轮廓，没意义
-print('sort_contours len cnt:',len(refCnts))
-digits = {}
-
-# 循环浏览轮廓，提取ROI并将其与相应的数字相关联
-# loop over the OCR-A reference contours
-for (i, c) in enumerate(refCnts):
-    # compute the bounding box for the digit, extract it, and resize
-    # it to a fixed size
-    (x, y, w, h) = cv2.boundingRect(c)
-    roi = ref[y:y + h, x:x + w]
-    roi = cv2.resize(roi, (57, 88))
-    cv2.imshow('roi', roi)
-    cv2.waitKey(500)
-
-    # update the digits dictionary, mapping the digit name to the ROI
-    digits[i] = roi
-# 从参考图像中提取数字，并将其与相应的数字名称相关联
-print('digits:',digits.keys())
-'''
 
 # try1
 digits = {}
@@ -95,8 +70,8 @@ per = int(cols / 10)
 for x in range(10):
     roi = ref[:, x * per:(x + 1) * per]
     roi = cv2.resize(roi, (57, 88))
-    cv2.imshow('roi', roi)
-    cv2.waitKey(500)
+    # cv2.imshow('roi', roi)
+    # cv2.waitKey(500)
 
     # update the digits dictionary, mapping the digit name to the ROI
     digits[x] = roi
@@ -120,6 +95,11 @@ gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 # regions against a dark background (i.e., the credit card numbers)
 tophat = cv2.morphologyEx(gray, cv2.MORPH_TOPHAT, rectKernel)
 
+# cv2.imshow('tophat', tophat)
+# cv2.waitKey(0)
+
+
+
 # compute the Scharr gradient of the tophat image, then scale
 # the rest back into the range [0, 255]
 gradX = cv2.Sobel(tophat, ddepth=cv2.CV_32F, dx=1, dy=0,
@@ -141,10 +121,13 @@ thresh = cv2.threshold(gradX, 0, 255,
 thresh = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, sqKernel)
 
 # find contours in the thresholded image, then initialize the
-# list of digit locations找到轮廓并初始化数字分组位置列表。
+# list of digit locations
+# 找到轮廓并初始化数字分组位置列表。
 cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
                         cv2.CHAIN_APPROX_SIMPLE)
-cnts = cnts[0] if imutils.is_cv2() else cnts[1]
+# cnts = cnts[0] if imutils.is_cv2() else cnts[1]
+cnts = cnts[0] 
+
 locs = []
 
 # loop over the contours
@@ -152,6 +135,7 @@ for (i, c) in enumerate(cnts):
     # compute the bounding box of the contour, then use the
     # bounding box coordinates to derive the aspect ratio
     (x, y, w, h) = cv2.boundingRect(c)
+    # print(x,y,w,h)
     ar = w / float(h)
 
     # since credit cards used a fixed size fonts with 4 groups
@@ -185,10 +169,13 @@ for (i, (gX, gY, gW, gH)) in enumerate(locs):
     # detect the contours of each individual digit in the group,
     # then sort the digit contours from left to right
     digitCnts = cv2.findContours(group.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    digitCnts = imutils.grab_contours(digitCnts)
+    digitCnts = contours.sort_contours(digitCnts,method="left-to-right")[0]
+    print(digitCnts[0])
     cv2.imshow('digitCnts', digitCnts[0])
     cv2.waitKey(1000)
-    digitCnts = digitCnts[0] if imutils.is_cv2() else digitCnts[1]
-    # digitCnts = digitCnts[1]
+    # digitCnts = digitCnts[0] if imutils.is_cv2() else digitCnts[1]
+    digitCnts = digitCnts[1]
     # digitCnts = contours.sort_contours(digitCnts,method="left-to-right")[0]
 
     # loop over the digit contours

@@ -22,7 +22,7 @@ class File(object):
     def open(self, filename=None, mode='r'):
         if filename is None:
             filename = self.filename
-
+        # print(cv2.imread(filename))
         return cv2.imread(filename), open(filename, mode)
 
     def save(self, image=None, filename_override=None):
@@ -46,6 +46,7 @@ class Image(object):
 
     def lines(self):
         lines = cv2.HoughLinesP(self.image, 1, np.pi / 2, 6, None, 50, 10)
+        print(lines)
         for line in lines[0]:
             pt1 = (line[0], line[1])
             pt2 = (line[2], line[3])
@@ -53,7 +54,8 @@ class Image(object):
 
 
 if __name__ == '__main__':
-    File = File('images/a.png')
+    # File = File('images/a.png')
+    File = File('children-draw.png')
     Image = Image(File.open()[0])
     Image.image = Image.grayscale()
     Image.lines()

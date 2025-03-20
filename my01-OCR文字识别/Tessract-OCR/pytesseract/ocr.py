@@ -15,13 +15,17 @@ import argparse
 import cv2
 import os
 
-# construct the argument parse and parse the arguments
-ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", required=True,
-                help="path to input image to be OCR'd")
-ap.add_argument("-p", "--preprocess", type=str, default="thresh",
-                help="type of preprocessing to be done")
-args = vars(ap.parse_args())
+# # construct the argument parse and parse the arguments
+# ap = argparse.ArgumentParser()
+# ap.add_argument("-i", "--image", required=True,
+#                 help="path to input image to be OCR'd")
+# ap.add_argument("-p", "--preprocess", type=str, default="thresh",
+#                 help="type of preprocessing to be done")
+# args = vars(ap.parse_args())
+
+args = {'image':'../tesserocr/sample.jpg',
+        'preprocess':'blur'
+        }
 
 # load the example image and convert it to grayscale
 image = cv2.imread(args["image"])
@@ -45,8 +49,9 @@ cv2.imwrite(filename, gray)
 
 # load the image as a PIL/Pillow image, apply OCR, and then delete
 # the temporary file
-text = pytesseract.image_to_string(Image.open(filename))
-os.remove(filename)
+text = pytesseract.image_to_string(gray)
+# os.remove(filename)
+print(type(text))
 print(text)
 
 # show the output images

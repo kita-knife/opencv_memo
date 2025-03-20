@@ -16,7 +16,7 @@ if __name__ == '__main__':
     tracker_types = ['BOOSTING', 'MIL', 'KCF', 'TLD', 'MEDIANFLOW', 'GOTURN']
     # tracker_type = tracker_types[2]
     tracker_type = tracker_types[0]
-    tracker = cv2.Tracker_create(tracker_type)
+    tracker = cv2.legacy.TrackerMOSSE_create()
 
     # Read video
     video = cv2.VideoCapture("videos/chaplin.mp4")
@@ -33,10 +33,10 @@ if __name__ == '__main__':
         sys.exit()
 
     # Define an initial bounding box
-    bbox = (287, 23, 86, 320)
+    # bbox = (287, 23, 86, 320)
 
     # Uncomment the line below to select a different bounding box
-    # bbox = cv2.selectROI(frame, False)
+    bbox = cv2.selectROI(frame, False)
 
     # Initialize tracker with first frame and bounding box
     ok = tracker.init(frame, bbox)
@@ -61,7 +61,7 @@ if __name__ == '__main__':
             # Tracking success
             p1 = (int(bbox[0]), int(bbox[1]))
             p2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
-            cv2.rectangle(frame, p1, p2, (255, 0, 0), 2, 1)
+            cv2.rectangle(frame, p1, p2, (0, 0, 255), 2, 1)
         else:
             # Tracking failure
             cv2.putText(frame, "Tracking failure detected", (100, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)

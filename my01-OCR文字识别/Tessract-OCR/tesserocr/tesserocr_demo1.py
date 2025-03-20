@@ -7,8 +7,7 @@ create time:16/10/21 11:44
 
 from tesserocr import PyTessBaseAPI
 
-images = ['/Volumes/GF/Project/Python/Tesserocr/tesserocr/sample1.jpeg', '/Volumes/GF/Project/Python/Tesserocr/tesserocr/sample2.jpeg',
-          '/Volumes/GF/Project/Python/Tesserocr/tesserocr/sample3.jpeg']
+images = ['sample.jpg', 'sample2.jpeg','sample3.jpeg']
 
 with PyTessBaseAPI() as api:
     for img in images:

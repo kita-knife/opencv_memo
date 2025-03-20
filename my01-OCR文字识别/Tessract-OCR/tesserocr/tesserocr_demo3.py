@@ -11,8 +11,8 @@ from tesserocr import PyTessBaseAPI, PSM
 
 with PyTessBaseAPI(psm=PSM.AUTO_OSD) as api:
     # image = Image.open("/usr/src/tesseract/testing/eurotext.tif")#No such file
-    # image = Image.open("eurotext.tif")
-    image = Image.open('phototest.tif')
+    image = Image.open("eurotext.tif")
+    # image = Image.open('phototest.tif')
     api.SetImage(image)
     api.Recognize()
 
